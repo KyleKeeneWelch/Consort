@@ -13,7 +13,7 @@ exports.index_post = asyncHandler(async (req, res) => {
 });
 
 exports.login_get = asyncHandler(async (req, res) => {
-  res.send("NOT IMPLEMENTED YET");
+  res.render("login");
 });
 
 exports.login_post = asyncHandler(async (req, res) => {
@@ -21,7 +21,7 @@ exports.login_post = asyncHandler(async (req, res) => {
 });
 
 exports.register_get = asyncHandler(async (req, res) => {
-  res.send("NOT IMPLEMENTED YET");
+  res.render("register");
 });
 
 exports.register_post = asyncHandler(async (req, res) => {
