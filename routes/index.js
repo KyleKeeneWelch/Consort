@@ -27,8 +27,6 @@ router.get("/users/:id/update", userController.update_user_get);
 router.put("/users/:id/update", userController.update_user_put);
 
 // Room
-router.get("/rooms/:id", roomController.room_get);
-
 router.get("/rooms/create", roomController.create_room_get);
 
 router.post("/rooms/create", roomController.create_room_post);
@@ -40,6 +38,8 @@ router.put("/rooms/:id/update", roomController.update_room_put);
 router.get("/rooms/:id/delete", roomController.delete_room_get);
 
 router.delete("/rooms/:id/delete", roomController.delete_room_delete);
+
+router.get("/rooms/:id", roomController.room_get);
 
 // Tag
 

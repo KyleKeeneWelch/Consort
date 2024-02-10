@@ -7,7 +7,7 @@ exports.room_get = asyncHandler(async (req, res) => {
 });
 
 exports.create_room_get = asyncHandler(async (req, res) => {
-  res.send("NOT IMPLEMENTED YET");
+  res.render("createroom");
 });
 
 exports.create_room_post = asyncHandler(async (req, res) => {
