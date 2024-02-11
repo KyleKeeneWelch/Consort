@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%- title %></title>
+</head>
+
+<body>
+    <h1><%- title %></h1>
+    <!-- Display errors. Might be good to include in separate view and using include syntax instead of rewriting -->
+    <% if (locals.errors) { %>
+        <% errors.forEach((err)=> { %>
+        <p><%- err.msg %></p>
+        <% }) %>
+    <% } %>
+
+    <% if (messages.error) { %>
+        <p><%- messages.error %></p>
+    <% } %>
+    <form method="POST" action=<% locals.title=="Register" ? "/register" :
+        `/users/${user._id}/update` %>>
+        <div>
+            <label for="first_name">First Name</label>
+            <input type="text" name="first_name" id="first_name" required value=<%- locals.user
+                ? user.first_name : "" %>>
+        </div>
+        <div>
+            <label for="last_name">Last Name</label>
+            <input type="text" name="last_name" id="last_name" required value=<%- locals.user ?
+                user.last_name : "" %>>
+        </div>
+        <div>
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" required value=<%- locals.user ?
+                user.username : "" %>>
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" required value=<%- locals.user ?
+                user.email : "" %>>
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required>
+        </div>
+        <div>
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" name="confirm_password" id="confirm_password" required>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+    <% if (title=="Register" ) { %>
+        <a href="/login">Login</a>
+    <% } else { %>
+        <a href="/">Dashboard</a>
+    <% } %>
+</body>
+
+</html>
