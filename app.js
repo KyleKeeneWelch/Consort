@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
+const favicon = require('serve-favicon');
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
@@ -16,12 +17,19 @@ const limiter = RateLimit({
   max: 50,
 });
 const cors = require("cors");
+const session = require("express-session");
 const passport = require("passport");
-// const localStrategy = require("./helpers/passport-config");
-
+const flash = require("express-flash");
+const {
+  localStrategy,
+  serializeUserFunction,
+  deserializeUserFunction,
+} = require("./helpers/passport-config");
 const indexRouter = require("./routes/index");
+const { setCurrentUser } = require("./helpers/middleware");
 
 const app = express();
+app.use(favicon(path.join(__dirname, 'public', '/images/favicon.ico')))
 
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
@@ -38,17 +46,15 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
-// view engine setup
 app.options("*", cors(corsOptions));
-app.use("/", indexRouter);
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(logger("dev"));
+app.use(flash());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(passport.initialize());
 app.use(cors());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
@@ -56,7 +62,21 @@ app.use(compression());
 app.use(helmet());
 app.use(limiter);
 
-// passport.use("login", localStrategy);
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+passport.use("local", localStrategy());
+passport.serializeUser(serializeUserFunction);
+passport.deserializeUser(deserializeUserFunction);
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(setCurrentUser);
+app.use("/", indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
