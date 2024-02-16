@@ -10,12 +10,12 @@ exports.localStrategy = () => {
         try {
           const result = await User.findOne({ email: email });
           if (!result) {
-            return done(null, false, { message: "Użytkownik nie znaleziony" });
+            return done(null, false, { message: "User not found" });
           }
           const passwordMatches = await bcrypt.compare(password, result.password);
   
           if (!passwordMatches) {
-            return done(null, false, { message: "Nieprawidłowe dane uwierzytelniające" });
+            return done(null, false, { message: "Invalid credentials" });
           }
   
           const user = {
@@ -27,7 +27,7 @@ exports.localStrategy = () => {
             password: result.password,
           };
   
-          return done(null, user, { message: "Użytkownik zalogowany" });
+          return done(null, user, { message: "User logged in" });
         } catch (error) {
           return done(error);
         }

@@ -34,11 +34,16 @@
                 if ((!emailPattern.test(inputEmail.value))) {
                     invalidFeedbackEmail.textContent = 'Invalid email address format.'
                     isInValid(inputEmail)
-                } 
+                } else {
+                    isValid(inputEmail)
+                }
+                
 
                 if ((!inputPassword.validity.valid)){
                     invalidFeedbackPassword.textContent = 'Password is required with a minimum of 8 characters'
                     isInValid(inputPassword)
+                } else {
+                    isValid(inputPasswordS)
                 }
 
             }, false)
