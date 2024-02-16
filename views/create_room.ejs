@@ -3,54 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Room</title>
-    
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <title><%- locals.title %></title>
+    <script defer src="/javascripts/main.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">   
 </head>
-<body class="d-flex flex-column min-vh-80">
+
+<body class="d-flex flex-column min-vh-100">
     <% include navbar %>
-
-    <div class="container">
-        <div class="row justify-content-center">
-            <h1 class="text-center mb-4">Create Room </h1>
-            <div class="col-md-3">
-                <div class="mb-5">
-                    <label for="exampleFormControlInput1" class="form-label">Room Name : </label>
-                    <input type="Room name:" class="form-control" id="exampleFormControlInput1" placeholder="example room name">
+    <div class="container-fluid flex-grow-1">
+        <div class="row justify-content-center align-items-center vh-100">
+            <div class="col-md-6">
+                <!-- Display errors. Might be good to include in separate view and using include syntax instead of rewriting -->
+                <% if (locals.errors) { %>
+                    <% errors.forEach((err)=> { %>
+                        <p><%- err.msg %></p>
+                    <% }) %>
+                <% } %>
+                <h1 class="text-center"><%- locals.title %></h1>
+                <!-- Sets the action to create or update a room depending on the passed in title -->
+                <form method="POST" id="createUpdateRoomForm" action=<%- locals.title=="Create Room"
+                    ? "/rooms/create" : `/rooms/${locals.room._id}/update` %>>
+                    <div class="row">
+                        <!-- Left Side Content -->
+                        <div class="col-md-6 left-content">
+                            <div class="mb-3">
+                                <label for="title">Title</label>
+                                <!-- Populates the values of input fields if a room is being updated / contained errors -->
+                                <input type="Room name:" class="form-control" name="title" id="title" placeholder="Example Title" required value=<%- locals.room ? locals.room.title : "" %>>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description">Description</label>
+                                <input type="Description:" class="form-control" name="description" id="description" placeholder="Example Description" value=<%- locals.room ? locals.room.description
+                                    : "" %>>
+                            </div>
+                        </div>
+                        <!-- Right Side Content -->
+                        <div class="col-md-6">
+                            <div>
+                                <label for="tags">Tags</label>
+                                <div class="mb-3">
+                                    <label>Create a Tag</label>
+                                    <input class="form-control" type="text" id="addNewTag" placeholder="Example Description">
+                                    <button type="submit" class="btn btn-secondary btn-md" type="button" id="btnAddTag">Add Tag</button>
+                                </div>
+                                <p>Maximum 3 tags!</p>
+                        <div class="container text-center" id="tagsContainer">
+                            <div class="row align-items-start">
+                                <div class="col">
+                                    
+                            <!-- Loop through each tag -->
+                            <% tags.forEach((tag)=> { %>
+                                <div>
+                                    <!-- If room is being updated / contained errors then we will need to check the boxes previously checked -->
+                                    <% if (locals.room) { %>
+                                        <!-- If a single tag or group is the same as the current looped tag then check. Disable the hidden value if unchecked. -->
+                                        <% if (locals.room.tags.filter(roomTag=> roomTag.title == tag.title).length
+                                            > 0 || locals.room.tags.title == tag.title) { %>
+                                            <input type="hidden" value=<%- tag._id %> class="checkboxValue"
+                                            name="tags">
+                                            <input type="checkbox" name="tags" class="checkbox" checked>
+                                            <p><%- tag.title %></p>
+                                        <% } else { %>
+                                            <input type="hidden" disabled value=<%- tag._id %>
+                                            class="checkboxValue"
+                                            name="tags">
+                                            <input type="checkbox" name="tags" class="checkbox">
+                                            <p><%- tag.title %></p>
+                                        <% } %>
+                                    <% } else { %>
+                                        <input type="hidden" disabled value=<%- tag._id %>
+                                        class="checkboxValue"
+                                        name="tags">
+                                        <input type="checkbox" name="tags" class="checkbox">
+                                        <p><%- tag.title %></p>
+                                    <% } %>
+                                    <!-- If the current user owns the tag, then display delete link. href depends on current page -->
+                                    <% if (locals.currentUser.id==tag.user) { %>
+                                        <% if (locals.title=="Create Room" ) { %>
+                                            <a href=<%-
+                                                `/tags/${tag._id}/delete?page=CreateRoom`
+                                                %>>
+                                                Delete
+                                            </a>
+                                        <% } else { %>
+                                            <a href=<%-
+                                                `/tags/${tag._id}/delete?page=UpdateRoom&roomId=${room._id}`
+                                                %>>
+                                                Delete
+                                            </a>
+                                        <% } %>
+                                    <% } %>
+                                </div>
+                                <hr>
+                            <% }) %>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="Description" class="form-label">Description :</label>
-                    <textarea class="form-control" id="Example Description" rows="4"></textarea>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="mb-3">
-                    <label for="selectMenu" class="form-label">Tag : </label>
-                    <select class="form-select" multiple aria-label="Multiple select example" id="selectMenu">
-                        <option selected>select tag</option>
-                        <option value="1">tag1</option>
-                        <option value="2">tag2</option>
-                        <option value="3">tag3</option>
-                        <option value="1">tag4</option>
-                    </select>
-                    <label for="maxlebel" class="form-label">Maxiumum 4 labels</label>
-                </div>
+                    </div>
+                
+                    <div class="text-center">
+                        <a href="/"><button class="btn btn-primary btn-md" type="button">Cancel</button></a>
+                        <button type="submit" class="btn btn-secondary btn-md">Submit</button> 
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-3 text-center">
-                <button type="button" class="btn btn-primary btn-md">Cancel</button>
-            </div>
-            <div class="col-3 text-center">
-                <button type="button" class="btn btn-secondary btn-md">Create Room</button>
-            </div>
-        </div>
-    </div>
-    
 </body>
+
 </html>
-
-
