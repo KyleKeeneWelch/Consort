@@ -2,3 +2,14 @@
   min-height: 100px;
   
 }
+
+@media (min-width: 576px) {
+  .navbar-brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .navbar-nav {
+  margin-left: auto !important;
+}
+}

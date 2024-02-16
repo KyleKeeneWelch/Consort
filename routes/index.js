@@ -4,71 +4,112 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 const roomController = require("../controllers/roomController");
 const tagController = require("../controllers/tagController");
-const messageController = require("../controllers/messageController");
+const commentController = require("../controllers/commentController");
+
+const {
+  checkIdFormat,
+  checkAuthenticated,
+  checkNotAuthenticated,
+} = require("../helpers/middleware");
 
 // Dashboard
-router.get("/", userController.index_get);
-
-router.post("/", userController.index_post);
+router.get("/", checkAuthenticated, userController.index_get);
 
 // Login
-router.get("/login", userController.login_get);
+router.get("/login", checkNotAuthenticated, userController.login_get);
 
-router.post("/login", userController.login_post);
+router.post("/login", checkNotAuthenticated, userController.login_post);
+
+// Logout
+router.get("/logout", checkAuthenticated, userController.logout_get);
 
 // Register
-router.get("/register", userController.register_get);
+router.get("/register", checkNotAuthenticated, userController.register_get);
 
-router.post("/register", userController.register_post);
+router.post("/register", checkNotAuthenticated, userController.register_post);
 
 // Edit Account
-router.get("/users/:id/update", userController.update_user_get);
+router.get(
+  "/users/:id/update",
+  checkAuthenticated,
+  checkIdFormat(),
+  userController.update_user_get
+);
 
-router.put("/users/:id/update", userController.update_user_put);
+router.post(
+  "/users/:id/update",
+  checkAuthenticated,
+  checkIdFormat(),
+  userController.update_user_post
+);
 
 // Room
-router.get("/rooms/create", roomController.create_room_get);
+router.get("/rooms/create", checkAuthenticated, roomController.create_room_get);
 
-router.post("/rooms/create", roomController.create_room_post);
+router.post(
+  "/rooms/create",
+  checkAuthenticated,
+  roomController.create_room_post
+);
 
-router.get("/rooms/:id/update", roomController.update_room_get);
+router.get(
+  "/rooms/:id/update",
+  checkAuthenticated,
+  checkIdFormat(),
+  roomController.update_room_get
+);
 
-router.put("/rooms/:id/update", roomController.update_room_put);
+router.post(
+  "/rooms/:id/update",
+  checkAuthenticated,
+  checkIdFormat(),
+  roomController.update_room_post
+);
 
-router.get("/rooms/:id/delete", roomController.delete_room_get);
+router.post(
+  "/rooms/:id/delete",
+  checkAuthenticated,
+  checkIdFormat(),
+  roomController.delete_room_post
+);
 
-router.delete("/rooms/:id/delete", roomController.delete_room_delete);
-
-router.get("/rooms/:id", roomController.room_get);
+router.get(
+  "/rooms/:id",
+  checkAuthenticated,
+  checkIdFormat(),
+  roomController.room_get
+);
 
 // Tag
 
-router.delete("/tags/:id/delete", tagController.delete_tag_delete);
+router.get(
+  "/tags/:id/delete",
+  checkAuthenticated,
+  checkIdFormat(),
+  tagController.delete_tag_get
+);
 
-// Message
+// Comment
 
 router.post(
-  "/rooms/:id/messages/create",
-  messageController.create_message_post
+  "/rooms/:id/comments/create",
+  checkAuthenticated,
+  checkIdFormat(),
+  commentController.create_comment_post
 );
 
-router.put(
-  "/rooms/:id/messages/:id/update",
-  messageController.update_message_put
+router.post(
+  "/rooms/:id/comments/:id/update",
+  checkAuthenticated,
+  checkIdFormat(),
+  commentController.update_comment_post
 );
 
-router.delete(
-  "/rooms/:id/messages/:id/delete",
-  messageController.delete_message_delete
+router.post(
+  "/rooms/:id/comments/:id/delete",
+  checkAuthenticated,
+  checkIdFormat(),
+  commentController.delete_comment_post
 );
-
-// MIDDLEWARE TO CHECK IF/IF NOT AUTHENTICATED
-// function checkAuthenticated(req, res, next) {
-
-// }
-
-// function checkNotAuthenticated(req, res, next) {
-
-// }
 
 module.exports = router;

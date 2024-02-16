@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign up</title>
-    <!-- Dodanie stylów Bootstrapa -->
+    <title>Create Room</title>
+    
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-80">
@@ -12,17 +12,18 @@
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="mb-3">
+            <h1 class="text-center mb-4">Create Room </h1>
+            <div class="col-md-3">
+                <div class="mb-5">
                     <label for="exampleFormControlInput1" class="form-label">Room Name : </label>
                     <input type="Room name:" class="form-control" id="exampleFormControlInput1" placeholder="example room name">
                 </div>
                 <div class="mb-3">
                     <label for="Description" class="form-label">Description :</label>
-                    <textarea class="form-control" id="Example Description" rows="3"></textarea>
+                    <textarea class="form-control" id="Example Description" rows="4"></textarea>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="mb-3">
                     <label for="selectMenu" class="form-label">Tag : </label>
                     <select class="form-select" multiple aria-label="Multiple select example" id="selectMenu">
@@ -39,16 +40,17 @@
     </div>
 
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-3 mx-auto">
-                <button type="button" class="btn btn-primary btn-sm">Cancel</button>
+        <div class="row justify-content-center">
+            <div class="col-3 text-center">
+                <button type="button" class="btn btn-primary btn-md">Cancel</button>
             </div>
-            <div class="col-3 mx-auto">
-                <button type="button" class="btn btn-secondary btn-sm">Create Room</button>
+            <div class="col-3 text-center">
+                <button type="button" class="btn btn-secondary btn-md">Create Room</button>
             </div>
         </div>
     </div>
     
 </body>
 </html>
+
 
