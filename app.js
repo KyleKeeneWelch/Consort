@@ -3,7 +3,7 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-const favicon = require('serve-favicon');
+const favicon = require("serve-favicon");
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
@@ -29,13 +29,12 @@ const indexRouter = require("./routes/index");
 const { setCurrentUser } = require("./helpers/middleware");
 
 const app = express();
-app.use(favicon(path.join(__dirname, 'public', '/images/favicon.ico')))
 
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 const mongoDB = process.env.MONGO_URI;
 
-main().catch((err) => console.log(err));x``
+main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB);
   console.log("Connected to database");
@@ -51,6 +50,7 @@ app.options("*", cors(corsOptions));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+app.use(favicon(path.join(__dirname, "public", "/images/favicon.ico")));
 app.use(logger("dev"));
 app.use(flash());
 app.use(express.json());

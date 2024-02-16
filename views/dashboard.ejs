@@ -10,48 +10,48 @@
 <body>
 
     <% include navbar %>
-    <p>Dashboard</p>
-    <a href="/logout">Logout</a>
-    <!-- Sends value as query parameter in URL to same route -->
-    <form method="GET" action="/">
-        <input name="search" value=<%- searchValue %>>
-        <button type="submit">Search</button>
-    </form>
-    <h2>Rooms</h2>
-    <!-- Loop through rooms -->
-    <% locals.rooms.forEach((room)=> { %>
-        <div>
-            <a href=<%- `/rooms/${room._id}` %>><%- room.title %></a>
-            <p><%- room.description %></p>
-            <p><%- room.user.username %></p>
-            <ul>
-                <!-- Loop through tags in room -->
-                <% room.tags.forEach((tag)=> { %>
-                    <li>
-                        <a href=<%- `/?search=${tag.title}` %>>
-                            <%- tag.title %>
-                        </a>
-                    </li>
-                    <% }) %>
-            </ul>
-        </div>
-        <hr>
-        <% }) %>
-            <h2>Tags</h2>
-            <ul>
-                <!-- Loop through tags in application. Send the title of tag as query paramter if selected. -->
-                <% locals.tags.forEach((tag)=> { %>
-                    <li>
-                        <a href=<%- `/?search=${tag.title}` %>>
-                            <%- tag.title %>
-                        </a>
-                    </li>
-                    <% }) %>
-            </ul>
-            <a href=<%- `/users/${currentUser._id}/update` %>>Edit Account</a>
-            <a href="/rooms/create">Create Room</a>
-            <p>#To Update: http://localhost:3000/rooms/65c7fe35e52aecfb3d310ede/update</p>
+        <p>Dashboard</p>
+        <a href="/logout">Logout</a>
+        <!-- Sends value as query parameter in URL to same route -->
+        <form method="GET" action="/">
+            <input name="search" value=<%- searchValue %>>
+            <button type="submit">Search</button>
+        </form>
+        <h2>Rooms</h2>
+        <!-- Loop through rooms -->
+        <% locals.rooms.forEach((room)=> { %>
+            <div>
+                <a href=<%- `/rooms/${room._id}` %>><%- room.title %></a>
+                <p><%- room.description %></p>
+                <p><%- room.user.username %></p>
+                <ul>
+                    <!-- Loop through tags in room -->
+                    <% room.tags.forEach((tag)=> { %>
+                        <li>
+                            <a href=<%- `/?search=${tag.title}` %>>
+                                <%- tag.title %>
+                            </a>
+                        </li>
+                        <% }) %>
+                </ul>
+            </div>
+            <hr>
+            <% }) %>
+                <h2>Tags</h2>
+                <ul>
+                    <!-- Loop through tags in application. Send the title of tag as query paramter if selected. -->
+                    <% locals.tags.forEach((tag)=> { %>
+                        <li>
+                            <a href=<%- `/?search=${tag.title}` %>>
+                                <%- tag.title %>
+                            </a>
+                        </li>
+                        <% }) %>
+                </ul>
+                <a href=<%- `/users/${currentUser._id}/update` %>>Edit Account</a>
+                <a href="/rooms/create">Create Room</a>
+                <p>#To Update: http://localhost:3000/rooms/65c7fe35e52aecfb3d310ede/update</p>
 
-        </body>
+</body>
 
 </html>
