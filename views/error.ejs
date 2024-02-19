@@ -9,12 +9,12 @@
 <body>
     <% include navbar %>
     <div class="row">
-        <div class="col-xl-3 col-lg-12 text-center erorrColumn">
+        <div class="col-xl-5 col-lg-12 text-center erorrColumn">
             <h1 class=""><%= message %></h1>
             <h2 class=""><%= error.status %></h2>
             <a class="btn btn-primary mt-5 btn-lg" href="/" >Back to dashboard</a>
         </div>
-        <div class="col-xl-9 col-lg-12"  >
+        <div class="col-xl-7 col-lg-12"  >
             <pre><%= error.stack %></pre>
         </div>
     </div>

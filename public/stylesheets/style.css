@@ -75,10 +75,10 @@
   }
 }
 
-.commentContainer{
+.addCommentContainer{
   display: none;
 }
-
+            /* Comments*/
 .comment-frame {
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -91,7 +91,13 @@
 .comment-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 5px;
+}
+
+.username,
+.date {
+    flex: 1; 
 }
 
 .username {
@@ -99,10 +105,51 @@
 }
 
 .date {
+  text-align: right;
   font-size: 0.8em;
   color: #666;
 }           
 
+
+
+        /*  COMMENT ACTION  */
+.comment-actions {
+  display: flex;
+  gap: 10px; 
+  align-items: center; 
+}
+
+    /* Update button , delete, cancel*/
+
+.btnUpdateComment,
+.btnCancelUpdateComment,
+.btnDeleteComment {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer; 
+  padding: 0;
+}
+
+.btnUpdateComment:hover,
+.btnCancelUpdateComment:hover {
+  color: #333;
+  text-decoration: underline;
+}
+ 
+.btnDeleteComment:hover {
+  color: red;
+  text-decoration: underline;
+}
+    /* Cancel button  display none*/
+.btnCancelUpdateComment,
+.updateCommentForm{
+  display: none;
+}
+
+.comment-body .updateCommentForm {
+  width: 100%;
+}
             /*OTHERS*/
 
 .cancelButton{

@@ -24,6 +24,7 @@ exports.index_get = asyncHandler(async (req, res) => {
       });
 
       if (room.title.match(query) || isTagMatch) {
+        isTagMatch = false;
         return true;
       }
       return false;
@@ -124,6 +125,7 @@ exports.register_post = [
       username: req.body.username,
       email: req.body.email,
       password: hashedPassword,
+      createdAt: Date.now(),
     });
 
     if (!errors.isEmpty()) {

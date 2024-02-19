@@ -17,10 +17,10 @@ const isInValid = (input) => {
 
 document.addEventListener("DOMContentLoaded", function() {
     var addCommentBtn = document.getElementById("addCommentBtn");
-    var commentContainer = document.querySelector(".commentContainer");
+    var addCommentContainer = document.querySelector(".addCommentContainer");
 
     addCommentBtn.addEventListener("click", function() {
-        commentContainer.style.display = "block";
+        addCommentContainer.style.display = "block";
         addCommentBtn.style.display = "none";
     });
 
@@ -29,24 +29,108 @@ document.addEventListener("DOMContentLoaded", function() {
         // cancel button eventlistener
 
     cancelBtn.addEventListener("click", function() {
-        event.preventDefault();
-        commentContainer.style.display = "none";
+        addCommentContainer.style.display = "none";
         addCommentBtn.style.display = "inline-block";
-        document.getElementById("commentInput").value = "";
+        document.getElementById("commentBody").value = "";
     });
 });
 
         // form we want to apply custom Bootstrap validation styles to
 
-const forms = document.querySelectorAll('.needs-validation')
+const forms = document.querySelectorAll('.needs-validation1')
         // check if form is valid
 Array.from(forms).forEach(form => {
     form.addEventListener('submit', event => {
-        const commentInput = form.querySelector('#commentInput');
+        const commentBody = form.querySelector('#commentBody');
 
-        if (!commentInput.validity.valid) {
-            isInValid(commentInput);
+        if (!commentBody.validity.valid) {
+            isInValid(commentBody);
         } 
     });
 });
 
+        // update Comment 
+
+document.addEventListener('DOMContentLoaded', function () {
+    const commentFrames = document.querySelectorAll('.comment-frame');
+
+    commentFrames.forEach(commentFrame => {
+        const btnUpdateComment = commentFrame.querySelector('.btnUpdateComment');
+        const btnDeleteComment = commentFrame.querySelector('.btnDeleteComment');
+        const btnCancelUpdateComment = commentFrame.querySelector('.btnCancelUpdateComment');
+        const commentBody = commentFrame.querySelector('.comment-body p');
+        
+        const originalCommentText = commentBody.textContent;
+        const updateCommentForm = commentFrame.querySelector('.updateCommentForm')
+        const commentTextInput =  updateCommentForm.querySelector('.commentBody');
+
+        if (btnUpdateComment && btnDeleteComment && btnCancelUpdateComment && commentBody && commentTextInput && updateCommentForm) {
+            // update button 
+            btnUpdateComment.addEventListener('click', function () {
+                commentTextInput.value = originalCommentText; 
+                commentTextInput.classList.remove('is-invalid')
+
+                btnUpdateComment.style.display = 'none'; 
+                btnDeleteComment.style.display = 'none';
+                commentBody.style.display = 'none';
+
+                updateCommentForm.style.display = 'inline-block';
+                btnCancelUpdateComment.style.display = 'inline-block';
+                commentTextInput.focus();
+            });
+
+            // Cancel button
+            btnCancelUpdateComment.addEventListener('click', function (event) {
+                btnUpdateComment.style.display = 'inline-block'; 
+                btnDeleteComment.style.display = 'inline-block';
+                commentBody.style.display = 'inline-block';
+
+                updateCommentForm.style.display = 'none';
+                btnCancelUpdateComment.style.display = 'none';
+            })
+
+            // blur event on commentTextInput
+            commentTextInput.addEventListener('blur', function () {
+                
+                        btnUpdateComment.style.display = 'inline-block'; 
+                        btnDeleteComment.style.display = 'inline-block';
+                        commentBody.style.display = 'inline-block';
+                    
+                        updateCommentForm.style.display = 'none';
+                        btnCancelUpdateComment.style.display = 'none';
+                    
+                
+            });
+
+            // Update comment - Enter
+            commentTextInput.addEventListener('keypress', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    console.log(commentTextInput.value);
+                    if (!commentTextInput.validity.valid) {
+                        isInValid(commentTextInput);
+                        return;
+                    } 
+                    
+                    
+                    const updatedCommentText = commentTextInput.value;
+                    
+                    commentBody.textContent = updatedCommentText;
+
+                    btnUpdateComment.style.display = 'inline-block'; 
+                    btnDeleteComment.style.display = 'inline-block';
+                    commentBody.style.display = 'inline-block'; 
+
+                    updateCommentForm.style.display = 'none';
+                    btnCancelUpdateComment.style.display = 'none';
+                    
+                    
+            //send form
+                    updateCommentForm.submit();
+            
+                }
+            });
+        }
+    });
+
+});
