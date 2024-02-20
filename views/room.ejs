@@ -5,11 +5,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%- locals.room.title %></title>
-    <script defer src="/javascripts/room.js"></script>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteRoom" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Are You sure?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want delete room <%- room.title %>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                    <form method="POST" action=<%- `/rooms/${room._id}/delete` %>>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End modal  -->
+
+
     <% include navbar %>
+
+        <!-- Error-->
         <% if (locals.errors) { %>
             <% errors.forEach((err)=> { %>
                 <p><%- err.msg %></p>
@@ -18,105 +43,149 @@
                         <% if (messages.error) { %>
                             <p><%- messages.error %></p>
                             <% } %>
+                                <!-- Error end-->
 
-                                <div>
-                                    <div>
-                                        <h1><%- room.title %></h1>
-                                        <p><%- room.description %></p>
-                                        <p>Created by <%- room.user.username %> at <%- room.createdAtFormatted %></p>
-                                        <!-- Display Updated At if has been updated -->
-                                        <% if (room.createdAt.getTime() !=room.updatedAt.getTime()) { %>
-                                            <p><%- `Updated at ${room.updatedAtFormatted}` %></p>
-                                            <% } %>
-                                    </div>
-                                    <div>
-                                        <!-- Display each tag in room -->
-                                        <% room.tags.forEach((tag)=> { %>
-                                            <p><%- tag.title %></p>
-                                            <% }) %>
-                                    </div>
-                                </div>
 
-                                <div>
-                                    <% if (locals.currentUser.id==room.user._id) { %>
-                                        <div>
-                                            <form method="POST" action=<%- `/rooms/${room._id}/delete` %>>
-                                                <button type="submit">Delete room</button>
-                                            </form>
-                                        </div>
-                                        <div>
-                                            <form method="GET" action=<%- `/rooms/${room._id}/update` %>>
-                                                <button type="submit">Update room</button>
-                                            </form>
-                                        </div>
-                                        <% } %>
-                                            <div>
-                                                <button type="button" id="btnShowAddComment">Add comment</button>
+                                <!-- Sticky top, room name, descripion, tags, Add comment, delete room,  update room-->
+                                <div class="sticky-top2 bg-light pb-1 mb-2" id="navbarContainer">
+                                    <div class="row align-items-center">
+                                        <div class="col text-center">
+                                            <h1 class="roomName"><%- room.title %></h1> <!-- Room name-->
+                                            <div class="row d-inline">
+                                                <% room.tags.forEach((tag)=> { %> <!-- Tags-->
+                                                    <p class="d-inline">#<%- tag.title %></p>
+                                                    <% }) %>
                                             </div>
+                                            <p class="descriptionText"><%- room.description %></p> <!-- Description -->
+                                            <p class="text-muted text-center">
+                                                Created by <%- room.user.username %> at <%- room.createdAtFormatted %>
+                                                        <!-- room Created by [] at []-->
+                                                        <% if (room.createdAt.getTime() + 1000
+                                                            <=room.updatedAt.getTime() ) { %>
+                                                            <!-- room if Updated at []-->
+                                                            <%- `| Updated at ${room.updatedAtFormatted}` %>
+                                                                <% } %>
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-md-6 text-center mb-2">
+                                            <% if (locals.currentUser.id==room.user._id) { %>
+                                                <!-- room if owner of room add delete and update-->
+                                                <div class="d-inline-block">
+                                                    <button class="btn btn-secondary mr-2" id="deleteRoomBtn"
+                                                        data-bs-toggle="modal" data-bs-target="#deleteRoom">Delete
+                                                        Room</button>
+                                                    <form class="d-inline-block" method="GET" action=<%-
+                                                        `/rooms/${room._id}/update` %>>
+                                                        <button class="btn btn-primary" type="submit">Update
+                                                            Room</button>
+                                                    </form>
+                                                </div>
+                                                <% } %>
+                                        </div>
+
+                                        <div class="col-md-6 text-center">
+                                            <button class="btn btn-primary" id="addCommentBtn">Add Comment</button>
+                                            <!-- Add comment btn-->
+                                        </div>
+                                    </div>
+
+                                    <!-- Display add comment textarea-->
+                                    <div class="row addCommentContainer justify-content-center">
+                                        <form class="needs-validation1" method="POST" action=<%-
+                                            `/rooms/${room._id}/comments/create` %> novalidate>
+                                            <div class="mb-3">
+                                                <label for="commentBody" class="form-label">Add comment</label>
+                                                <div>
+                                                    <textarea class="form-control" id="commentBody" name="commentBody"
+                                                        placeholder="Enter your comment..." rows="3"
+                                                        required></textarea>
+                                                    <div class="invalid-feedback">Required</div>
+                                                </div>
+
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button type="submit" class="btn btn-primary">Add</button>
+                                                <button class="btn btn-secondary cancelButton" type="button"
+                                                    id="cancelButton">Cancel</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
+                                <!-- End sticky-->
 
-                                <hr>
-
-                                <!-- Display with JS if add comment button is pressed -->
-                                <div>
-                                    <form method="POST" id="addCommentForm" action=<%-
-                                        `/rooms/${room._id}/comments/create` %>>
-                                        <textarea name="commentBody"></textarea>
-                                        <button id="btnCancelAddComment" type="button">Cancel</button>
-                                        <button type="submit">Add</button>
-                                    </form>
-                                </div>
-
-                                <div>
-                                    <h3>Comments</h3>
-                                    <!-- If there are comments loop through otherwise display no comments message -->
+                                <!-- Cooments-->
+                                <div class="content" id="mainContent">
                                     <% if (room.comments.length> 0) { %>
                                         <% room.comments.forEach((comment)=> { %>
-                                            <div>
-                                                <div>
-                                                    <div>
-                                                        <p><strong><%- comment.user.username %></strong></p>
-                                                        <p><%- comment.user.email %></p>
-                                                    </div>
-                                                    <!-- Allow update and delete if current user is owner -->
+                                            <div class="comment-frame">
+                                                <div class="comment-header">
+                                                    <span class="username"><%- comment.user.username %></span>
+                                                    <!--Comment username-->
+
                                                     <% if (locals.currentUser.id==comment.user._id) { %>
-                                                        <div>
+                                                        <!-- if comment creator add delete, update button-->
+                                                        <div class="comment-actions">
+                                                            <button class="btnCancelUpdateComment"
+                                                                display="none">Cancel</button>
                                                             <button class="btnUpdateComment">Update Comment</button>
-                                                            <form method="POST" class="updateCommentForm" action=<%-
-                                                                `/rooms/${room._id}/comments/${comment._id}/update` %>>
-                                                                <textarea name="commentBody"></textarea>
-                                                                <button class="btnCancelUpdateComment"
-                                                                    type="button">Cancel</button>
-                                                                <button type="submit">Update</button>
-                                                            </form>
-                                                            <form method="POST" action=<%-
-                                                                `/rooms/${room._id}/comments/${comment._id}/delete` %>>
-                                                                <button type="submit">Delete Comment</button>
+                                                            <form method="POST"
+                                                                action=<%-`/rooms/${room._id}/comments/${comment._id}/delete`
+                                                                %>>
+                                                                <button class="btnDeleteComment"
+                                                                    type="Submit">Delete</button>
                                                             </form>
                                                         </div>
                                                         <% } %>
-                                                            <div>
 
-                                                            </div>
-                                                            <div>
-                                                                <p>Created at <%- comment.createdAtFormatted %></p>
-                                                                <!-- Display Updated At if has been updated -->
-                                                                <% if (comment.createdAt.getTime()
-                                                                    !=comment.updatedAt.getTime()) { %>
-                                                                    <p><%- `Updated at ${comment.updatedAtFormatted}` %>
-                                                                    </p>
+                                                            <span class="date">
+                                                                <span><%- comment.createdAtFormatted %></span>
+                                                                <!-- comment Created at []-->
+                                                                <% if (comment.createdAt.getTime() + 1000
+                                                                    <=comment.updatedAt.getTime() ) { %>
+                                                                    <!--comment if updated at[]-->
+                                                                    <span>updated: <%- comment.updatedAtFormatted
+                                                                            %></span>
                                                                     <% } %>
-                                                            </div>
-
+                                                            </span>
                                                 </div>
-                                                <p><%- comment.body %></p>
+                                                <div class="comment-body">
+                                                    <form method="POST" class="updateCommentForm needs-validation"
+                                                        action=<%- `/rooms/${room._id}/comments/${comment._id}/update`
+                                                        %> novalidate> <!-- comment Updating -->
+
+                                                        <div>
+                                                            <textarea class="form-control commentBody" id="commentBody"
+                                                                name="commentBody" placeholder="Enter your comment..."
+                                                                rows="3" required></textarea>
+                                                            <div class="invalid-feedback">Required</div>
+                                                        </div>
+
+                                                    </form>
+
+                                                    <p><%- comment.body %></p> <!-- Comment -->
+                                                </div>
                                             </div>
-                                            <hr>
+
                                             <% }) %>
                                                 <% } else { %>
-                                                    <p>No comments yet! Click Add comment to get started!</p>
+                                                    <div class="container">
+                                                        <div class="row justify-content-center">
+                                                            <div class="col-md-6 text-center">
+                                                                <p class="h4">No comments yet! Click Add comment to get
+                                                                    started!</p> <!--No comments-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <% } %>
                                 </div>
+                                <!-- Comments end-->
+
+
+
+                                <script src="/javascripts/room.js"></script>
 </body>
 
 </html>
