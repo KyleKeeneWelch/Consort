@@ -59,7 +59,19 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(compression());
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        "script-src": [
+          "self",
+          "http://localhost:3000/",
+          "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+        ],
+      },
+    },
+  })
+);
 app.use(limiter);
 
 app.use(
