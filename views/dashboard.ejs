@@ -1,57 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
 </head>
-
-<body>
-
+<body class="d-flex flex-column min-vh-80">
     <% include navbar %>
-        <p>Dashboard</p>
-        <a href="/logout">Logout</a>
-        <!-- Sends value as query parameter in URL to same route -->
-        <form method="GET" action="/">
-            <input name="search" value=<%- searchValue %>>
-            <button type="submit">Search</button>
-        </form>
-        <h2>Rooms</h2>
-        <!-- Loop through rooms -->
-        <% locals.rooms.forEach((room)=> { %>
-            <div>
-                <a href=<%- `/rooms/${room._id}` %>><%- room.title %></a>
-                <p><%- room.description %></p>
-                <p><%- room.user.username %></p>
-                <ul>
-                    <!-- Loop through tags in room -->
-                    <% room.tags.forEach((tag)=> { %>
-                        <li>
-                            <a href=<%- `/?search=${tag.title}` %>>
-                                <%- tag.title %>
-                            </a>
-                        </li>
-                        <% }) %>
-                </ul>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-12 p-4">
+                <!-- Dashboard text -->
+                <h1 class="row justify-content-center align-items-center">Dashboard</h1>
+                <!-- Container for CREATE ROOM & ROOM NAME SEARCH -->
+                <div class="container text-center">
+                    <div class="row">
+                        <div class="col">
+                            <!-- Create Room link -->
+                            <button class="btn btn-primary" type="submit">
+                                <a class="fs-5 link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="/rooms/create">Create Room</a>
+                            </button>
+                        </div>
+                        <div class="col">
+                            <!-- Room name search form -->
+                            <form method="GET" action="/">
+                                <div class="input-group mb-3">
+                                    <input class="form-control" placeholder="Search for rooms" aria-label="Search for rooms" aria-describedby="button-addon2" name="search" value=<%- searchValue %>>
+                                    <button class="btn btn-primary" type="submit" id="button-addon2">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- END OF ROOM NAME SEARCH -->
+                <!-- Sends value as query parameter in URL to same route -->
+
+                <div class="row">
+                    <!-- TAGS -->
+                    <div class="col-2">
+                        <h2>Tags</h2>
+                        <ul class="list-group">
+                            <!-- Loop through tags in application. Send the title of tag as query parameter if selected. -->
+                            <% locals.tags.forEach((tag)=> { %>
+                                <li class="list-group-item">
+                                    <a href=<%- `/?search=${tag.title}` %>>
+                                        <%- tag.title %>
+                                    </a>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                    <!-- ROOMS -->
+                    <div class="col-10">
+                        <div class="justify-content-center align-items-center">
+                            <!-- Loop through rooms -->
+                            <% locals.rooms.forEach((room)=> { %>
+                                <div class="card text-bg-primary mb-3" style="max-width: 188rem;">
+                                    <div class="card-header">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <!-- Room title with link to room details -->
+                                                    <a class="fs-3 link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href=<%- `/rooms/${room._id}` %>><%- room.title %></a>
+                                                </div>
+                                                <div class="col text-end">
+                                                    <!-- Username of room creator -->
+                                                    <p><%- room.user.username %></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Room description -->
+                                        <h5 class="card-title"><%- room.description %></h5>
+                                        <ul class="list-group list-group-horizontal">
+                                            <!-- Loop through tags in room -->
+                                            <% room.tags.forEach((tag)=> { %>
+                                                <li class="list-group-item">
+                                                    <a href=<%- `/?search=${tag.title}` %>>
+                                                        <%- tag.title %>
+                                                    </a>
+                                                </li>
+                                            <% }) %>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <hr>
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <hr>
-            <% }) %>
-                <h2>Tags</h2>
-                <ul>
-                    <!-- Loop through tags in application. Send the title of tag as query paramter if selected. -->
-                    <% locals.tags.forEach((tag)=> { %>
-                        <li>
-                            <a href=<%- `/?search=${tag.title}` %>>
-                                <%- tag.title %>
-                            </a>
-                        </li>
-                        <% }) %>
-                </ul>
-                <a href=<%- `/users/${currentUser._id}/update` %>>Edit Account</a>
-                <a href="/rooms/create">Create Room</a>
-                <p>#To Update: http://localhost:3000/rooms/65c7fe35e52aecfb3d310ede/update</p>
-
+        </div>
+    </div>
 </body>
-
 </html>
