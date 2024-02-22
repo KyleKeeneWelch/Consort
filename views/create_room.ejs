@@ -35,6 +35,11 @@
                                 <label for="description">Description</label>
                                 <input type="Description:" class="form-control" name="description" id="description" placeholder="Example Description" value=<%- locals.room ? locals.room.description
                                     : "" %>>
+                                <!-- Move buttons here -->
+                                <div class="text-center mt-3">
+                                    <a href="/"><button class="btn btn-primary btn-md" type="button">Cancel</button></a>
+                                    <button type="submit" class="btn btn-secondary btn-md">Submit</button> 
+                                </div>
                             </div>
                         </div>
                         <!-- Right Side Content -->
@@ -43,72 +48,68 @@
                                 <label for="tags">Tags</label>
                                 <div class="mb-3">
                                     <label>Create a Tag</label>
-                                    <input class="form-control" type="text" id="addNewTag" placeholder="Example Description">
+                                    <input class="form-control" type="text" id="addNewTag" placeholder="Example Tag">
                                     <button type="submit" class="btn btn-secondary btn-md" type="button" id="btnAddTag">Add Tag</button>
                                 </div>
                                 <p>Maximum 3 tags!</p>
-                        <div class="container text-center" id="tagsContainer">
-                            <div class="row align-items-start">
-                                <div class="col">
-                                    
-                            <!-- Loop through each tag -->
-                            <% tags.forEach((tag)=> { %>
-                                <div>
-                                    <!-- If room is being updated / contained errors then we will need to check the boxes previously checked -->
-                                    <% if (locals.room) { %>
-                                        <!-- If a single tag or group is the same as the current looped tag then check. Disable the hidden value if unchecked. -->
-                                        <% if (locals.room.tags.filter(roomTag=> roomTag.title == tag.title).length
-                                            > 0 || locals.room.tags.title == tag.title) { %>
-                                            <input type="hidden" value=<%- tag._id %> class="checkboxValue"
-                                            name="tags">
-                                            <input type="checkbox" name="tags" class="checkbox" checked>
-                                            <p><%- tag.title %></p>
-                                        <% } else { %>
-                                            <input type="hidden" disabled value=<%- tag._id %>
-                                            class="checkboxValue"
-                                            name="tags">
-                                            <input type="checkbox" name="tags" class="checkbox">
-                                            <p><%- tag.title %></p>
-                                        <% } %>
-                                    <% } else { %>
-                                        <input type="hidden" disabled value=<%- tag._id %>
-                                        class="checkboxValue"
-                                        name="tags">
-                                        <input type="checkbox" name="tags" class="checkbox">
-                                        <p><%- tag.title %></p>
-                                    <% } %>
-                                    <!-- If the current user owns the tag, then display delete link. href depends on current page -->
-                                    <% if (locals.currentUser.id==tag.user) { %>
-                                        <% if (locals.title=="Create Room" ) { %>
-                                            <a href=<%-
-                                                `/tags/${tag._id}/delete?page=CreateRoom`
-                                                %>>
-                                                Delete
-                                            </a>
-                                        <% } else { %>
-                                            <a href=<%-
-                                                `/tags/${tag._id}/delete?page=UpdateRoom&roomId=${room._id}`
-                                                %>>
-                                                Delete
-                                            </a>
-                                        <% } %>
-                                    <% } %>
+                                <div class="container text-center" id="tagsContainer">
+                                    <div class="row align-items-start">
+                                        <div class="col">
+                                            <!-- Loop through each tag -->
+                                            <% tags.forEach((tag)=> { %>
+                                                <div>
+                                                    <!-- If room is being updated / contained errors then we will need to check the boxes previously checked -->
+                                                    <% if (locals.room) { %>
+                                                        <!-- If a single tag or group is the same as the current looped tag then check. Disable the hidden value if unchecked. -->
+                                                        <% if (locals.room.tags.filter(roomTag=> roomTag.title == tag.title).length
+                                                            > 0 || locals.room.tags.title == tag.title) { %>
+                                                            <input type="hidden" value=<%- tag._id %> class="checkboxValue"
+                                                            name="tags">
+                                                            <input type="checkbox" name="tags" class="checkbox" checked>
+                                                            <p><%- tag.title %></p>
+                                                        <% } else { %>
+                                                            <input type="hidden" disabled value=<%- tag._id %>
+                                                            class="checkboxValue"
+                                                            name="tags">
+                                                            <input type="checkbox" name="tags" class="checkbox">
+                                                            <p><%- tag.title %></p>
+                                                        <% } %>
+                                                    <% } else { %>
+                                                        <input type="hidden" disabled value=<%- tag._id %>
+                                                        class="checkboxValue"
+                                                        name="tags">
+                                                        <input type="checkbox" name="tags" class="checkbox">
+                                                        <p><%- tag.title %></p>
+                                                    <% } %>
+                                                    <!-- If the current user owns the tag, then display delete link. href depends on current page -->
+                                                    <% if (locals.currentUser.id==tag.user) { %>
+                                                        <% if (locals.title=="Create Room" ) { %>
+                                                            <a href=<%-
+                                                                `/tags/${tag._id}/delete?page=CreateRoom`
+                                                                %>>
+                                                                Delete
+                                                            </a>
+                                                        <% } else { %>
+                                                            <a href=<%-
+                                                                `/tags/${tag._id}/delete?page=UpdateRoom&roomId=${room._id}`
+                                                                %>>
+                                                                Delete
+                                                            </a>
+                                                        <% } %>
+                                                    <% } %>
+                                                </div>
+                                                <hr>
+                                            <% }) %>
+                                        </div>
+                                    </div>
                                 </div>
-                                <hr>
-                            <% }) %>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                    </div>
-                
-                    <div class="text-center">
-                        <a href="/"><button class="btn btn-primary btn-md" type="button">Cancel</button></a>
-                        <button type="submit" class="btn btn-secondary btn-md">Submit</button> 
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </body>
-
 </html>
+
