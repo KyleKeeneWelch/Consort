@@ -99,14 +99,14 @@ router.post(
 );
 
 router.post(
-  "/rooms/:id/comments/:id/update",
+  "/rooms/:roomId/comments/:commentId/update",
   checkAuthenticated,
   checkIdFormat(),
   commentController.update_comment_post
 );
 
 router.post(
-  "/rooms/:id/comments/:id/delete",
+  "/rooms/:roomId/comments/:commentId/delete",
   checkAuthenticated,
   checkIdFormat(),
   commentController.delete_comment_post

@@ -22,9 +22,9 @@ exports.index_get = asyncHandler(async (req, res) => {
           return (isTagMatch = true);
         }
       });
-      console.log(room.title.match(query));
-      console.log(isTagMatch);
+
       if (room.title.match(query) || isTagMatch) {
+        isTagMatch = false;
         return true;
       }
       return false;
@@ -125,6 +125,7 @@ exports.register_post = [
       username: req.body.username,
       email: req.body.email,
       password: hashedPassword,
+      createdAt: Date.now(),
     });
 
     if (!errors.isEmpty()) {
@@ -148,7 +149,7 @@ exports.register_post = [
     }
 
     await user.save();
-    
+
     req.login(user, (err) => {
       if (err) {
         return next(err);
@@ -216,15 +217,14 @@ exports.update_user_post = [
       res.render("register", {
         user: user,
         errors: errors.array(),
-        title: "Edit Account"
+        title: "Edit Account",
       });
       return;
     }
 
     const existingUser = await User.findById(req.params.id);
-    console.log('error xD')
+
     if (!existingUser) {
-      
       res.render("register", {
         user: user,
         errors: [{ msg: "User doesn't exist" }],

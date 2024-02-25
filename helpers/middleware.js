@@ -15,6 +15,13 @@ exports.checkIdFormat = () => {
       return next();
     }
 
+    if (
+      ObjectId.isValid(req.params.roomId) &&
+      ObjectId.isValid(req.params.commentId)
+    ) {
+      return next();
+    }
+
     const err = new Error("Invalid ID");
     err.status = 400;
     err.message = "Invalid ID";

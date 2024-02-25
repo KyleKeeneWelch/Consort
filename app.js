@@ -3,7 +3,7 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-const favicon = require('serve-favicon');
+const favicon = require("serve-favicon");
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
@@ -29,7 +29,6 @@ const indexRouter = require("./routes/index");
 const { setCurrentUser } = require("./helpers/middleware");
 
 const app = express();
-app.use(favicon(path.join(__dirname, 'public', '/images/favicon.ico')))
 
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
@@ -51,6 +50,7 @@ app.options("*", cors(corsOptions));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+app.use(favicon(path.join(__dirname, "public", "/images/favicon.ico")));
 app.use(logger("dev"));
 app.use(flash());
 app.use(express.json());
@@ -59,7 +59,19 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(compression());
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        "script-src": [
+          "self",
+          "http://localhost:3000/",
+          "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+        ],
+      },
+    },
+  })
+);
 app.use(limiter);
 
 app.use(

@@ -1,52 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%- title %></title>
 </head>
 
-<body class="d-flex flex-column min-vh-80">
+<body class="d-flex flex-column min-vh-80 bg-light">
     <% include navbar %>
-    <% if (locals.errors && locals.errors.some(error => error.msg === 'User with email already exists')) { %>
+    <% if (locals.errors && locals.errors.some(error=> error.msg === 'User with email already exists')) { %>
         <script src="/javascripts/errorHandler/userExistError.js"></script>
     <% } %>
-    <% if (locals.errors) { %>
-        <% errors.forEach((err)=> { %>
-        <p><%- err.msg %></p>
-        <% }) %>
-    <% } %>
 
-    <% if (messages.error) { %>
-        <p><%- messages.error %></p>
-    <% } %>
     <div class="container flex-grow-1">
         <div class="row justify-content-center align-items-center vh-80">
-            <div class="col-md-6 col-lg-5 p-4" >
+            <div class="col-md-6 col-lg-5 p-4">
                 <h1 class="text-center mb-4"><%- title %></h1>
 
-                <form class="needs-validation" method="POST" novalidate action=<% locals.title=="Register" ? "/register" :
-                `/users/${user._id}/update` %> >
+                <form class="needs-validation" method="POST" novalidate action=<%
+                    locals.title=="Register" ? "/register" :
+                    `/users/${user._id}/update` %> >
 
                     <div class="mb-3 row">
-                        <label for="inputEmail3" class="col-sm-2 col-md-4  col-form-label">Email</label>
+                        <label for="inputEmail3"
+                            class="col-sm-2 col-md-4  col-form-label">Email</label>
                         <div class="col-sm-10 col-md-8">
-                            <input type="email"
-                            name="email"
-                            class="form-control"
-                            id="email"
-                            placeholder="Email"
-                            required 
-                            autofocus
-                            value=<%- locals.user ? user.email : "" %>>
+                            <input type="email" name="email" class="form-control"
+                                id="email" placeholder="Email" required autofocus
+                                value=<%- locals.user ? user.email : "" %>>
                             <div class="invalid-feedback"></div>
                         </div>
                     </div>
 
                     <div class="mb-3 row">
-                        <label for="inputPassword6" class="col-sm-2 col-md-4 col-form-label">Password</label>
+                        <label for="inputPassword6"
+                            class="col-sm-2 col-md-4 col-form-label">Password</label>
                         <div class="col-sm-10 col-md-8">
-                            <input type="password" id="password" name="password" class="form-control" aria-describedby="passwordHelpInline" placeholder="Password" minlength="8" maxlength="20" required>
+                            <input type="password" id="password" name="password"
+                                class="form-control"
+                                aria-describedby="passwordHelpInline"
+                                placeholder="Password" minlength="8" maxlength="20"
+                                required>
                             <span id="passwordHelpInline" class="form-text">
                                 Must be 8-20 characters long.
                             </span>
@@ -54,18 +49,27 @@
                     </div>
 
                     <div class="mb-3 row">
-                        <label for="inputPassword6" class="col-sm-2 col-md-4 col-form-label">Confirm password</label>
+                        <label for="inputPassword6"
+                            class="col-sm-2 col-md-4 col-form-label">Confirm
+                            password</label>
                         <div class="col-sm-10 col-md-8">
-                            <input type="password" id="confirm_password" name="confirm_password" class="form-control" aria-describedby="passwordHelpInline" placeholder="Confirm password" minlength="8" maxlength="20" required>
-                            <div class = "invalid-feedback"></div>
+                            <input type="password" id="confirm_password"
+                                name="confirm_password" class="form-control"
+                                aria-describedby="passwordHelpInline"
+                                placeholder="Confirm password" minlength="8"
+                                maxlength="20" required>
+                            <div class="invalid-feedback"></div>
                         </div>
                     </div>
 
                     <div class="mb-3 row">
-                        <label for="inputEmail3" class="col-sm-2 col-md-4  col-form-label">Username</label>
+                        <label for="inputEmail3"
+                            class="col-sm-2 col-md-4  col-form-label">Username</label>
                         <div class="col-sm-10 col-md-8">
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Username"  maxlength="20" required value=<%- locals.user ?
-                            user.username : "" %>>
+                            <input type="text" class="form-control" id="username"
+                                name="username" placeholder="Username"
+                                maxlength="20" required value=<%- locals.user ?
+                                user.username : "" %>>
                             <span id="passwordHelpInline" class="form-text">
                                 Maximum 20 characters long.
                             </span>
@@ -74,10 +78,13 @@
                     </div>
 
                     <div class="mb-3 row">
-                        <label for="inputEmail3" class="col-sm-2 col-md-4  col-form-label">First name</label>
+                        <label for="inputEmail3"
+                            class="col-sm-2 col-md-4  col-form-label">First
+                            name</label>
                         <div class="col-sm-10 col-md-8">
-                            <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First name"required value=<%- locals.user ?
-                             user.first_name : "" %>>
+                            <input type="text" class="form-control" id="first_name"
+                                name="first_name" placeholder="First name" required
+                                value=<%- locals.user ? user.first_name : "" %>>
                             <div class="invalid-feedback">
                                 Please provide first name.
                             </div>
@@ -85,10 +92,13 @@
                     </div>
 
                     <div class="mb-3 row">
-                        <label for="inputEmail3" class="col-sm-2 col-md-4  col-form-label">Last name</label>
+                        <label for="inputEmail3"
+                            class="col-sm-2 col-md-4  col-form-label">Last
+                            name</label>
                         <div class="col-sm-10 col-md-8">
-                            <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last name" required value=<%- locals.user ?
-                            user.last_name : "" %>>
+                            <input type="text" class="form-control" id="last_name"
+                                name="last_name" placeholder="Last name" required
+                                value=<%- locals.user ? user.last_name : "" %>>
                             <div class="invalid-feedback">
                                 Please provide last name.
                             </div>
@@ -96,22 +106,26 @@
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-auto">
-                            <% if (title === 'Register') { %>
-                                <button type="submit" class="btn btn-primary">Register</button>
-                            <% } else if (title === 'Edit Account') { %>
-                                <button type="submit" class="btn btn-primary">Update</button>
-                            <% } %>
+                            <% if (title==='Register' ) { %>
+                                <button type="submit"
+                                    class="btn btn-primary">Register</button>
+                                <% } else if (title==='Edit Account' ) { %>
+                                    <button type="submit"
+                                        class="btn btn-primary">Update</button>
+                                    <% } %>
                         </div>
-                      </div>
-                    
+                    </div>
+
                 </form>
-                <% if (title === 'Register') { %>
-                    <p class="text-center mt-3">If you have account <a href="/login">login</a></p>
-                <% } %>
-                </div>
+                <% if (title==='Register' ) { %>
+                    <p class="text-center mt-3">If you have account <a
+                            href="/login">login</a></p>
+                    <% } %>
+            </div>
         </div>
     </div>
     <script src="/javascripts/register.js"></script>
-   
+
 </body>
+
 </html>
