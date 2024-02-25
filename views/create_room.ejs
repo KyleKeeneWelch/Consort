@@ -35,7 +35,7 @@
                                 <label for="description">Description</label>
                                 <input type="Description:" class="form-control" name="description" id="description" placeholder="Example Description" value=<%- locals.room ? locals.room.description
                                     : "" %>>
-                                <!-- Move buttons here -->
+                                
                                 <div class="text-center mt-3">
                                     <a href="/"><button class="btn btn-primary btn-md" type="button">Cancel</button></a>
                                     <button type="submit" class="btn btn-secondary btn-md">Submit</button> 
@@ -49,7 +49,7 @@
                                 <div class="mb-3">
                                     <label>Create a Tag</label>
                                     <input class="form-control" type="text" id="addNewTag" placeholder="Example Tag">
-                                    <button type="submit" class="btn btn-secondary btn-md" type="button" id="btnAddTag">Add Tag</button>
+                                    <button class="btn btn-secondary btn-md" type="button" id="btnAddTag">Add Tag</button>
                                 </div>
                                 <p>Maximum 3 tags!</p>
                                 <div class="container text-center" id="tagsContainer">
