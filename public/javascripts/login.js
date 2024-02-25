@@ -44,7 +44,7 @@ Array.from(forms).forEach(form => {
         
 
         if ((!inputPassword.validity.valid)){
-            invalidFeedbackPassword.textContent = 'Password is required with a minimum of 8 characters'
+            invalidFeedbackPassword.textContent = 'Password is required with a minimum of 8 characters.'
             isInValid(inputPassword)
         } else {
             isValid(inputPasswordS)
