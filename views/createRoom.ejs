@@ -17,12 +17,12 @@
                 <% if (locals.errors) { %>
                     <% errors.forEach((err)=> { %>
                         <p><%- err.msg %></p>
-                    <% }) %>
-                <% } %>
+                        <% }) %>
+                            <% } %>
                 <h1 class="text-center"><%- locals.title %></h1>
                 <!-- Sets the action to create or update a room depending on the passed in title -->
                 <form method="POST" id="createUpdateRoomForm" action=<%- locals.title=="Create Room"
-                    ? "/rooms/create" : `/rooms/${locals.room._id}/update` %>>
+                            ? "/rooms/create" : `/rooms/${locals.room._id}/update` %>>
                     <div class="row">
                         <!-- Left Side Content -->
                         <div class="col-md-6 left-content">
@@ -61,45 +61,46 @@
                                                     <!-- If room is being updated / contained errors then we will need to check the boxes previously checked -->
                                                     <% if (locals.room) { %>
                                                         <!-- If a single tag or group is the same as the current looped tag then check. Disable the hidden value if unchecked. -->
-                                                        <% if (locals.room.tags.filter(roomTag=> roomTag.title == tag.title).length
+                                                        <% if (locals.room.tags.filter(roomTag=> roomTag.title ==
+                                                            tag.title).length
                                                             > 0 || locals.room.tags.title == tag.title) { %>
                                                             <input type="hidden" value=<%- tag._id %> class="checkboxValue"
                                                             name="tags">
                                                             <input type="checkbox" name="tags" class="checkbox" checked>
                                                             <p><%- tag.title %></p>
-                                                        <% } else { %>
-                                                            <input type="hidden" disabled value=<%- tag._id %>
-                                                            class="checkboxValue"
-                                                            name="tags">
-                                                            <input type="checkbox" name="tags" class="checkbox">
-                                                            <p><%- tag.title %></p>
-                                                        <% } %>
-                                                    <% } else { %>
-                                                        <input type="hidden" disabled value=<%- tag._id %>
-                                                        class="checkboxValue"
-                                                        name="tags">
-                                                        <input type="checkbox" name="tags" class="checkbox">
-                                                        <p><%- tag.title %></p>
-                                                    <% } %>
-                                                    <!-- If the current user owns the tag, then display delete link. href depends on current page -->
-                                                    <% if (locals.currentUser.id==tag.user) { %>
-                                                        <% if (locals.title=="Create Room" ) { %>
-                                                            <a href=<%-
-                                                                `/tags/${tag._id}/delete?page=CreateRoom`
-                                                                %>>
-                                                                Delete
-                                                            </a>
-                                                        <% } else { %>
-                                                            <a href=<%-
-                                                                `/tags/${tag._id}/delete?page=UpdateRoom&roomId=${room._id}`
-                                                                %>>
-                                                                Delete
-                                                            </a>
-                                                        <% } %>
-                                                    <% } %>
+                                                            <% } else { %>
+                                                                <input type="hidden" disabled value=<%- tag._id %>
+                                                                class="checkboxValue"
+                                                                name="tags">
+                                                                <input type="checkbox" name="tags" class="checkbox">
+                                                                <p><%- tag.title %></p>
+                                                                <% } %>
+                                                                    <% } else { %>
+                                                                        <input type="hidden" disabled value=<%- tag._id %>
+                                                                        class="checkboxValue"
+                                                                        name="tags">
+                                                                        <input type="checkbox" name="tags" class="checkbox">
+                                                                        <p><%- tag.title %></p>
+                                                                        <% } %>
+                                                                            <!-- If the current user owns the tag, then display delete link. href depends on current page -->
+                                                                            <% if (locals.currentUser.id==tag.user) { %>
+                                                                                <% if (locals.title=="Create Room" ) { %>
+                                                                                    <a href=<%-
+                                                                                        `/tags/${tag._id}/delete?page=CreateRoom`
+                                                                                        %>>
+                                                                                        Delete
+                                                                                    </a>
+                                                                                    <% } else { %>
+                                                                                        <a href=<%-
+                                                                                            `/tags/${tag._id}/delete?page=UpdateRoom&roomId=${room._id}`
+                                                                                            %>>
+                                                                                            Delete
+                                                                                        </a>
+                                                                                        <% } %>
+                                                                                            <% } %>
                                                 </div>
                                                 <hr>
-                                            <% }) %>
+                                                <% }) %>
                                         </div>
                                     </div>
                                 </div>
