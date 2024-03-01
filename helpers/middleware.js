@@ -1,10 +1,12 @@
 const ObjectId = require("mongoose").Types.ObjectId;
 
+// Set current user before controller
 exports.setCurrentUser = (req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 };
 
+// Check if provided ID is in correct format
 exports.checkIdFormat = () => {
   return (req, res, next) => {
     if (ObjectId.isValid(req.params.id) && !req.params._id) {

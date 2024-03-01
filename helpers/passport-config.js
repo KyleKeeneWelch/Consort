@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 
 const User = require("../models/user");
 
+// Defines new local strategy that will check email for existing user and password with hashed password in database and authenticates if so.
 exports.localStrategy = () => {
   return new LocalStrategy(
     { usernameField: "email", passwordField: "password" },
@@ -35,8 +36,10 @@ exports.localStrategy = () => {
   );
 };
 
+// Serializes user in session. (Sets ID)
 exports.serializeUserFunction = (user, done) => done(null, user.id);
 
+// Deserializes user in session (Gets ID)
 exports.deserializeUserFunction = async (id, done) => {
   try {
     const user = await User.findById(id);

@@ -6,6 +6,7 @@ const { body, validationResult } = require("express-validator");
 const passport = require("passport");
 const bcrypt = require("bcrypt");
 
+// Get Dashboard
 exports.index_get = asyncHandler(async (req, res) => {
   let rooms = await Room.find().populate("user").populate("tags").exec();
   const tags = await Tag.find().exec();
@@ -13,9 +14,11 @@ exports.index_get = asyncHandler(async (req, res) => {
 
   if (req.query.search) {
     searchValue = req.query.search;
+    // Create regex with search
     const query = new RegExp(req.query.search, "i");
     let isTagMatch = false;
 
+    // Filter rooms by finding a match through either the title or tags
     rooms = rooms.filter((room) => {
       room.tags.forEach((tag) => {
         if (tag.title.match(query)) {
@@ -37,10 +40,12 @@ exports.index_get = asyncHandler(async (req, res) => {
   });
 });
 
+// Get Login
 exports.login_get = (req, res) => {
   res.render("login");
 };
 
+// Login
 exports.login_post = [
   body("email", "Email is required")
     .trim()
@@ -65,6 +70,7 @@ exports.login_post = [
       next();
     }
   },
+  // Use passport local strategy to authenticate and redirect based on outcome
   (req, res, next) => {
     passport.authenticate("local", {
       successRedirect: "/",
@@ -74,6 +80,7 @@ exports.login_post = [
   },
 ];
 
+// Logout
 exports.logout_get = (req, res, next) => {
   req.logout((err) => {
     if (err) {
@@ -83,10 +90,12 @@ exports.logout_get = (req, res, next) => {
   });
 };
 
+// Get register
 exports.register_get = (req, res) => {
   res.render("register", { title: "Register" });
 };
 
+// Register
 exports.register_post = [
   body("first_name", "First Name is required")
     .trim()
@@ -117,6 +126,7 @@ exports.register_post = [
     .withMessage("Confirm Password needs to match Password"),
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
+    // Hash password
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     const user = new User({
@@ -137,6 +147,7 @@ exports.register_post = [
       return;
     }
 
+    // Check for existing user with that email
     const existingUser = await User.findOne({ email: req.body.email }).exec();
 
     if (existingUser) {
@@ -148,17 +159,20 @@ exports.register_post = [
       return;
     }
 
+    // Create user
     await user.save();
 
+    // New user so log straight in to the dashboard
     req.login(user, (err) => {
       if (err) {
         return next(err);
       }
-      return res.redirect("/"); // Redirect to the homepage or any desired route after login
+      return res.redirect("/");
     });
   }),
 ];
 
+// Get Edit Account
 exports.update_user_get = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id)
     .select({ password: 0 })
@@ -173,6 +187,7 @@ exports.update_user_get = asyncHandler(async (req, res) => {
   res.render("register", { title: "Edit Account", user: user });
 });
 
+// Update user
 exports.update_user_post = [
   body("first_name", "First Name is required")
     .trim()
@@ -203,6 +218,7 @@ exports.update_user_post = [
     .withMessage("Confirm Password needs to match Password"),
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
+    // Hash password
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     const user = new User({
@@ -233,6 +249,7 @@ exports.update_user_post = [
     }
 
     user._id = req.params.id;
+    // Update user
     await User.findByIdAndUpdate(req.params.id, user, {});
     res.redirect("/");
   }),

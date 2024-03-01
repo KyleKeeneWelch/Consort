@@ -1,4 +1,4 @@
-// If in development, set env constiables
+// If in development, set env variables
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
@@ -28,25 +28,27 @@ const {
 const indexRouter = require("./routes/index");
 const { setCurrentUser } = require("./helpers/middleware");
 
+// Create app
 const app = express();
 
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 const mongoDB = process.env.MONGO_URI;
-
+// Connect to database
 main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB);
   console.log("Connected to database");
 }
 
+// Define cors options and set
 const corsOptions = {
   origin: "*",
   optionsSuccessStatus: 200,
 };
-
 app.options("*", cors(corsOptions));
 
+// Set EJS view engine
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -59,6 +61,7 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(compression());
+// Content security policy allow bootstrap CDN
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -74,6 +77,7 @@ app.use(
 );
 app.use(limiter);
 
+// Use sessions with a secret
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -81,12 +85,15 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+// Initialize and use passport for authentication
 passport.use("local", localStrategy());
 passport.serializeUser(serializeUserFunction);
 passport.deserializeUser(deserializeUserFunction);
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Set middleware and routes
 app.use(setCurrentUser);
 app.use("/", indexRouter);
 

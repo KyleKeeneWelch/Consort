@@ -5,6 +5,7 @@ const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const ObjectId = require("mongoose").Types.ObjectId;
 
+// Get Room
 exports.room_get = asyncHandler(async (req, res, next) => {
   const room = await Room.findById(req.params.id)
     .populate("user")
@@ -21,11 +22,13 @@ exports.room_get = asyncHandler(async (req, res, next) => {
   res.render("room", { room: room });
 });
 
+// Get Create Room
 exports.create_room_get = asyncHandler(async (req, res) => {
   const tags = await Tag.find().exec();
   res.render("createRoom", { title: "Create Room", tags: tags });
 });
 
+// Create a Room
 exports.create_room_post = [
   body("title", "Title is required").trim().isLength({ min: 1 }).escape(),
   body("description", "Description is required")
@@ -35,6 +38,7 @@ exports.create_room_post = [
   body("tags.*", "Tags are required").trim().isLength({ min: 1 }).escape(),
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
+    // Revised meaning new tag(s) need to be added
     let isRevisedRoom = false;
 
     let room = new Room({
@@ -46,6 +50,7 @@ exports.create_room_post = [
       createdAt: Date.now(),
     });
 
+    // Passes as a string if singular so need to check for array and then length
     if (Array.isArray(req.body.tags) && req.body.tags.length > 3) {
       res.render("createRoom", {
         title: "Create Room",
@@ -73,6 +78,7 @@ exports.create_room_post = [
       return;
     }
 
+    // Check if new tags have been passed, push to array and set as revised room. Singular new tag isn't array so requires separate statement.
     let newTags = [];
     if (Array.isArray(req.body.tags)) {
       req.body.tags.forEach((tag) => {
@@ -88,6 +94,7 @@ exports.create_room_post = [
       }
     }
 
+    // Creates the new tags and assigns the req.body.tags with the created tag IDs then creates the room.
     if (isRevisedRoom) {
       let createTags = [];
 
@@ -117,12 +124,14 @@ exports.create_room_post = [
         res.redirect(`/rooms/${room._id}`);
       });
     } else {
+      // Just create
       room.save();
       res.redirect(`/rooms/${room._id}`);
     }
   }),
 ];
 
+// Get Update Room
 exports.update_room_get = asyncHandler(async (req, res, next) => {
   const room = await Room.findById(req.params.id).populate("tags").exec();
 
@@ -144,6 +153,7 @@ exports.update_room_get = asyncHandler(async (req, res, next) => {
   res.render("createRoom", { title: "Update Room", tags: tags, room: room });
 });
 
+// Update Room
 exports.update_room_post = [
   body("title", "Title is required").trim().isLength({ min: 1 }).escape(),
   body("description", "Description is required")
@@ -164,6 +174,7 @@ exports.update_room_post = [
       _id: req.params.id,
     });
 
+    // Passes as a string if singular so need to check for array and then length
     if (Array.isArray(req.body.tags) && req.body.tags.length > 3) {
       const _room = await Room.findById(req.params.id).populate("tags").exec();
       res.render("createRoom", {
@@ -193,6 +204,7 @@ exports.update_room_post = [
       return;
     }
 
+    // Check if new tags have been passed, push to array and set as revised room. Singular new tag isn't array so requires separate statement.
     let newTags = [];
     if (Array.isArray(req.body.tags)) {
       req.body.tags.forEach((tag) => {
@@ -208,6 +220,7 @@ exports.update_room_post = [
       }
     }
 
+    // Creates the new tags and assigns the req.body.tags with the created tag IDs then updates the room.
     if (isRevisedRoom) {
       let createTags = [];
 
@@ -237,12 +250,14 @@ exports.update_room_post = [
         res.redirect(`/rooms/${room._id}`);
       });
     } else {
+      // Just update room
       await Room.findByIdAndUpdate(req.params.id, room, {});
       res.redirect(`/rooms/${room._id}`);
     }
   }),
 ];
 
+// Delete Room
 exports.delete_room_post = asyncHandler(async (req, res, next) => {
   const room = await Room.findById(req.params.id).exec();
 
@@ -253,7 +268,7 @@ exports.delete_room_post = asyncHandler(async (req, res, next) => {
   }
 
   const commentsToDel = [];
-
+  // Obtains and deletes each comment in room.
   room.comments.forEach((comment) => {
     const promise = new Promise(async (resolve, reject) => {
       await Comment.findByIdAndDelete(comment).exec();
@@ -264,6 +279,7 @@ exports.delete_room_post = asyncHandler(async (req, res, next) => {
 
   await Promise.all(commentsToDel);
 
+  // Deletes room
   await Room.findByIdAndDelete(req.params.id).exec();
 
   res.redirect("/");

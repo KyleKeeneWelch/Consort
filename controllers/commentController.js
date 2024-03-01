@@ -3,6 +3,7 @@ const Room = require("../models/room");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 
+// Create comment
 exports.create_comment_post = [
   body("commentBody", "Comment Body is required")
     .trim()
@@ -34,9 +35,11 @@ exports.create_comment_post = [
       return;
     }
 
+    // Create comment
     await comment.save();
 
     const room = await Room.findById(req.params.id).exec();
+    // Add comment to room
     room.comments.push(comment._id);
 
     const newRoom = new Room({
@@ -50,12 +53,14 @@ exports.create_comment_post = [
       _id: req.params.id,
     });
 
+    // Update room
     await Room.findByIdAndUpdate(req.params.id, newRoom, {}).exec();
 
     res.redirect(`/rooms/${req.params.id}`);
   }),
 ];
 
+// Update comment
 exports.update_comment_post = [
   body("commentBody", "Comment Body is required")
     .trim()
@@ -87,12 +92,14 @@ exports.update_comment_post = [
       return;
     }
 
+    // Update comment
     await Comment.findByIdAndUpdate(req.params.commentId, comment, {}).exec();
 
     res.redirect(`/rooms/${req.params.roomId}`);
   }),
 ];
 
+// Delete comment
 exports.delete_comment_post = asyncHandler(async (req, res) => {
   const comment = await Comment.findById(req.params.commentId).exec();
   const room = await Room.findById(req.params.roomId).exec();
@@ -109,6 +116,7 @@ exports.delete_comment_post = asyncHandler(async (req, res) => {
     return next(err);
   }
 
+  // Filter room comments to not include comment
   room.comments = room.comments.filter((comment) => {
     return comment != req.params.commentId;
   });
@@ -124,8 +132,10 @@ exports.delete_comment_post = asyncHandler(async (req, res) => {
     _id: room._id,
   });
 
+  // Update room
   await Room.findByIdAndUpdate(req.params.roomId, newRoom, {}).exec();
 
+  // Delete comment
   await Comment.findByIdAndDelete(req.params.commentId).exec();
 
   res.redirect(`/rooms/${req.params.roomId}`);
