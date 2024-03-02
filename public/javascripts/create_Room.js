@@ -8,7 +8,7 @@ function addChangeEventListener(checkbox) {
   });
 }
 
-function initCreateRoom() {
+function initApp() {
   const checkboxes = document.querySelectorAll(".checkbox");
   const createUpdateRoomForm = document.getElementById("createUpdateRoomForm");
   const btnAddTag = document.getElementById("btnAddTag");
@@ -59,4 +59,4 @@ function initCreateRoom() {
   });
 }
 
-initCreateRoom();
+initApp();
